@@ -5,20 +5,27 @@ to types defined here.
 
 from typing import Callable, Dict, Iterable, Sequence, Optional, Tuple
 
-# The following are elemental types.
+# -------------------------------------------------------------------------------------#
+# The following are elemental types.                                                   |
+# -------------------------------------------------------------------------------------#
 
-Unit = str  # This is an abbreviation for "linguistic unit."
-Text = Unit
-Token = Unit
-Char = Unit
-NGram = Tuple[Unit]
 Probability = float
-Lexicon = Dict[Unit, Probability]
-ContextLexicon = Dict[NGram, Lexicon]
 # A given probability function may be undefined for certain inputs.
 P = Callable[[str], Optional[Probability]]
+Unit = str  # This is an abbreviation for "linguistic unit."
+Char = Unit
+Token = Unit
+Text = Unit
+NGram = Tuple[Unit]
+# Iterable is used instead of Sequence here so that a large corpus need not be stored in
+# memory.
+Corpus = Iterable[Text]
+Lexicon = Dict[Unit, Probability]
+ContextLexicon = Dict[NGram, Lexicon]
 
-# The following are more complicated types that must be implemented.
+# -------------------------------------------------------------------------------------#
+# The following are more complicated types that require reusable implementations.      |
+# -------------------------------------------------------------------------------------#
 
 # See splitters.py for implementation.
 Splitter = Callable[[str], Sequence[Unit]]
@@ -40,7 +47,4 @@ CompoundPFactory = Callable[
     SequentialConditionalP,
 ]
 # See lexicon for implementation(s).
-# Iterable is used instead of Sequence here to allow constant-space iteration over a
-# very large corpus.
-LexiconFactory = Callable[[Iterable[Text], Splitter], Lexicon]
-ContextLexiconFactory = Callable[[Iterable[Text], Splitter], ContextLexicon]
+LexiconFactory = Callable[[Corpus, Splitter], Tuple[Lexicon, ContextLexicon]]
