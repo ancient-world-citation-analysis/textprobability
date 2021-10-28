@@ -4,7 +4,10 @@ import sys
 import time
 from numpy.random import default_rng
 from textprobability.core.splitters import latin_tokens, characters
-from textprobability.data.serial import context_lexicon2serializable
+from textprobability.core.lexicon import (
+    context_lexicon2serializable,
+    LexiconContextLexiconBuilder,
+)
 
 from textprobability.data.web_walk import (
     web_walk,
@@ -13,7 +16,6 @@ from textprobability.data.web_walk import (
     get_query_string_remover,
     get_prefixer,
 )
-from textprobability.data.LexiconBuilder import LexiconContextLexiconBuilder
 
 _SECONDS_PER_HOUR = 60 * 60
 
@@ -35,13 +37,13 @@ def main(
         with open(out, "w") as f:
             json.dump(
                 {
-                    "token_lexicon": token_builder.lexicon,
+                    "token_lexicon": token_builder.get_lexicon().to_serializable(),
                     "token_context_lexicon": context_lexicon2serializable(
-                        token_builder.context_lexicon
+                        token_builder.get_context_lexicon()
                     ),
-                    "char_lexicon": char_builder.lexicon,
+                    "char_lexicon": char_builder.get_lexicon().to_serializable(),
                     "char_context_lexicon": context_lexicon2serializable(
-                        char_builder.context_lexicon
+                        char_builder.get_context_lexicon()
                     ),
                 },
                 f,
@@ -65,10 +67,6 @@ def main(
     return 0
 
 
-main("en", "en.json", 0.01, -1, 905, 1, 2)
-
-
-"""
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="This script gets data about a given language and saves it."
@@ -87,10 +85,12 @@ if __name__ == "__main__":
         help="The approximate maximum number of tokens to collect.",
         type=int,
     )
+    # It is worth noting that because websites constantly change, the random seed is
+    #  insufficient for replicability.
     parser.add_argument(
         "--seed",
         default=2319,
-        help="The random seed that completely determines this program's behavior.",
+        help="The random seed that determines this program's behavior.",
         type=int,
     )
     parser.add_argument(
@@ -117,4 +117,3 @@ if __name__ == "__main__":
             args.char_n,
         )
     )
-"""

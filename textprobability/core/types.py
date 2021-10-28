@@ -3,13 +3,13 @@ important abstractions as well. Abbreviations such as "scp", "mpf", and "clf" ma
 to types defined here.
 """
 
-from typing import Callable, Dict, Iterable, Sequence, Optional, Tuple
+from typing import Callable, Dict, Iterable, Sequence, Optional, Tuple, Any
 
 # -------------------------------------------------------------------------------------#
 # The following are elemental types.                                                   |
 # -------------------------------------------------------------------------------------#
 
-Probability = float
+Probability = float  # (In the interval [0, 1], of course.)
 # A given probability function may be undefined for certain inputs.
 P = Callable[[str], Optional[Probability]]
 Unit = str  # This is an abbreviation for "linguistic unit."
@@ -20,13 +20,25 @@ NGram = Tuple[Unit, ...]
 # Iterable is used instead of Sequence here so that a large corpus need not be stored in
 # memory.
 Corpus = Iterable[Text]
-Lexicon = Dict[Unit, Probability]
-ContextLexicon = Dict[NGram, Lexicon]
 
 # -------------------------------------------------------------------------------------#
 # The following are more complicated types that require reusable implementations.      |
 # -------------------------------------------------------------------------------------#
 
+# See lexicon.py for implementation.
+class Lexicon:
+    def __getitem__(self, key: Unit) -> Probability:
+        raise NotImplementedError()
+
+    def to_serializable(self) -> Any:
+        raise NotImplementedError()
+
+    @classmethod
+    def from_serializable(cls, serializable: Any) -> Any:
+        raise NotImplementedError()
+
+
+ContextLexicon = Dict[NGram, Lexicon]
 # See splitters.py for implementation.
 # Splitters are idempotent.
 Splitter = Callable[[str], Sequence[Unit]]
