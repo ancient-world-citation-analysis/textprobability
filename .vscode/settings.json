@@ -1,0 +1,18 @@
+{
+    "editor.rulers": [88],
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/*/**": true,
+        "**/.idea/**": true,
+        "**/__pycache__/**": true,
+        "**/.ipynb_checkpoints/**": true,
+        "**/env/**": true
+    },
+    "[python]": {
+        "editor.formatOnSave": true
+    },
+    "python.linting.mypyEnabled": true,
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": ["--experimental-string-processing"]
+}
