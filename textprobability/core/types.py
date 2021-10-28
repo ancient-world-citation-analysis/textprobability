@@ -16,7 +16,7 @@ Unit = str  # This is an abbreviation for "linguistic unit."
 Char = Unit
 Token = Unit
 Text = Unit
-NGram = Tuple[Unit]
+NGram = Tuple[Unit, ...]
 # Iterable is used instead of Sequence here so that a large corpus need not be stored in
 # memory.
 Corpus = Iterable[Text]
@@ -28,6 +28,7 @@ ContextLexicon = Dict[NGram, Lexicon]
 # -------------------------------------------------------------------------------------#
 
 # See splitters.py for implementation.
+# Splitters are idempotent.
 Splitter = Callable[[str], Sequence[Unit]]
 SequentialConditionalP = Callable[[Sequence[Unit]], Sequence[Optional[Probability]]]
 # See common.py for implementation.

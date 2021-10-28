@@ -1,6 +1,6 @@
 """This module implements common schemes for splitting strings into linguistic units."""
 
-from textprobability.types import Splitter
+from textprobability.core.types import Splitter
 import re
 
 
