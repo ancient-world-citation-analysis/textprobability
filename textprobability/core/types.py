@@ -46,5 +46,5 @@ CompoundPFactory = Callable[
     [SequentialConditionalP, SequentialConditionalP, SequentialConditionalP, Splitter],
     SequentialConditionalP,
 ]
-# See lexicon for implementation(s).
+# See common.py for implementation(s).
 LexiconFactory = Callable[[Corpus, Splitter], Tuple[Lexicon, ContextLexicon]]
