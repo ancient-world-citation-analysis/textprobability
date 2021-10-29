@@ -1,7 +1,7 @@
 """Implements a buildable, serializable, deserializable lexicon."""
 
 
-from typing import Any, Dict, Iterator, Tuple, Union
+from typing import Any, Dict, Iterator, Tuple, Union, Optional
 from textprobability.core.types import (
     Unit,
     Probability,
@@ -30,11 +30,16 @@ class LexiconImpl(Lexicon):
         self._probabilities: Dict[Unit, float] = {
             k: v / n_obs for k, v in counts.items()
         }
-        self.n_obs: int = n_obs  # In Java this would be final.
+        super().__init__(n_obs)
 
     def __getitem__(self, key: Unit) -> Probability:
         """Returns the probability associated with `key`."""
         return self._probabilities[key]
+
+    def get(
+        self, key: Unit, default: Optional[Probability] = None
+    ) -> Optional[Probability]:
+        return self._probabilities[key] if key in self._probabilities else default
 
     def to_serializable(self) -> SerializableLexicon:
         """Gets a representation of `self` that can be serialized using JSON."""

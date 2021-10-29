@@ -25,16 +25,27 @@ Corpus = Iterable[Text]
 # The following are more complicated types that require reusable implementations.      |
 # -------------------------------------------------------------------------------------#
 
-# See lexicon.py for implementation.
-class Lexicon:
-    def __getitem__(self, key: Unit) -> Probability:
-        raise NotImplementedError()
 
+class Serializable:
     def to_serializable(self) -> Any:
         raise NotImplementedError()
 
     @classmethod
     def from_serializable(cls, serializable: Any) -> Any:
+        raise NotImplementedError()
+
+
+# See lexicon.py for implementation.
+class Lexicon(Serializable):
+    def __init__(self, n_obs: int):
+        self.n_obs = n_obs
+
+    def __getitem__(self, key: Unit) -> Probability:
+        raise NotImplementedError()
+
+    def get(
+        self, key: Unit, default: Optional[Probability] = None
+    ) -> Optional[Probability]:
         raise NotImplementedError()
 
 

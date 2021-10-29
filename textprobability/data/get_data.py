@@ -8,7 +8,7 @@ from textprobability.core.lexicon import (
     context_lexicon2serializable,
     LexiconContextLexiconBuilder,
 )
-
+from textprobability.data.langdata import DefaultLangData
 from textprobability.data.web_walk import (
     web_walk,
     wikipedia,
@@ -36,16 +36,12 @@ def main(
     def finish():
         with open(out, "w") as f:
             json.dump(
-                {
-                    "token_lexicon": token_builder.get_lexicon().to_serializable(),
-                    "token_context_lexicon": context_lexicon2serializable(
-                        token_builder.get_context_lexicon()
-                    ),
-                    "char_lexicon": char_builder.get_lexicon().to_serializable(),
-                    "char_context_lexicon": context_lexicon2serializable(
-                        char_builder.get_context_lexicon()
-                    ),
-                },
+                DefaultLangData(
+                    token_builder.get_lexicon(),
+                    token_builder.get_context_lexicon(),
+                    char_builder.get_lexicon(),
+                    char_builder.get_context_lexicon(),
+                ).to_serializable(),
                 f,
             )
 
