@@ -1,7 +1,7 @@
 snippets = [
     ("en", "IETF language tags were first"),
     ("en", "from Stesichorus"),
-    ("(en", "of 106,460,000 km2"),
+    ("en", "of 106,460,000 km2"),
     ("fr", "où le sigle désigne l'Internet Engineering Task Force"),
     ("fr", "du mot est"),
     ("fr", "donc"),
