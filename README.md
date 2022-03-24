@@ -21,11 +21,13 @@ Feel free to observe the data collection logs
 (`./textprobability/data/data-collection-logs`) to see what kinds of sources were used
 for language data.
 
-This includes 50-100 MB of data per language. This incurs a one-time cost on program
-startup when data is initially loaded from JSON files. This is a slow process, and it is
-avoidable: Qualitatively speaking, it has appeared that useful results could be obtained
-using one or two orders of magnitude less data. However, that possibility has not been
-pursued due to lack of time (and immediate use cases).
+This includes on the order of 10 MB of data per language. This incurs a one-time cost on
+program startup when data is initially loaded from JSON files. This quantity of data is
+from *after* summarizing the original data, a process which can reduce its size by up to
+an order of magnitude. It is not yet clear what the consequences are of summarizing the
+language data. For example, it may have a helpful de-noising effect, or it may
+adversely affect the quality of the model by limiting its worldly knowledge -- probably
+the latter.
 
 ## Usage
 
@@ -53,4 +55,9 @@ python3 -m examples.classification
 Or:
 ```bash
 python3 -m examples.defaults
+```
+
+For help collecting new language data, `cd` into this directory and run:
+```bash
+python3 -m textprobability.data.get_data --help
 ```

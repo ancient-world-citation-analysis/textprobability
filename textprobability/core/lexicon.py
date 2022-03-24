@@ -41,6 +41,20 @@ class LexiconImpl(Lexicon):
     ) -> Optional[Probability]:
         return self._probabilities[key] if key in self._probabilities else default
 
+    def summarize(self, min_n):
+        """Summarizes this, reducing the amount of space required to store
+        this.
+        :param min_n: The minimum number of observations of a linguistic unit for
+        it to be recorded as observed.
+        :return: A summarized version of this.
+        """
+        filtered = {
+            unit: count for unit, count in self._counts.items() if count >= min_n
+        }
+        # sum(filtered.values()) should be very close to self.n_obs for reasonably
+        # chosen min_n, but it is recomputed here anyway.
+        return LexiconImpl(filtered, sum(filtered.values()))
+
     def to_serializable(self) -> SerializableLexicon:
         """Gets a representation of `self` that can be serialized using JSON."""
         return (self._counts, self.n_obs)
