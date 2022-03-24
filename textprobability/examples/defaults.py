@@ -5,8 +5,6 @@ print("Loading language data from JSON...")
 t0 = time.time()
 from textprobability.core.defaults import stateless, markov
 
-print(f"Loaded language data in {time.time() - t0:.1f} seconds.")
-
 en_s: P = stateless("en")
 fr_s: P = stateless("fr")
 en_m: P = markov("en")
