@@ -10,12 +10,15 @@ from textprobability.core.splitters import latin_tokens, characters
 from textprobability.data.langdata import DefaultLangData
 
 
-def _get_data_latin(langcode: str) -> DefaultLangData:
+DEFAULT_DATA_PATH: Path = Path(__file__).parent.parent / "data"
+
+
+def _get_data_latin(langcode: str, path: str) -> DefaultLangData:
     """Retrieves the language data associated with `langcode`."""
     # FIXME: This should be placed on sys.path so that there is no reliance on relative
     # paths. This is one of a number of changes that would be required to allow people
     # to install and interact with this.
-    with open(Path(__file__).parent.parent / "data" / "{}.json".format(langcode)) as f:
+    with open(Path(path) / "{}.json".format(langcode)) as f:
         return DefaultLangData.from_serializable(json.load(f))
 
 
@@ -24,9 +27,9 @@ def _constant_scp3(c: float) -> SequentialConditionalP:
     return lambda sequence: [c for _ in range(len(sequence))]
 
 
-def stateless(langcode: str) -> P:
+def stateless(langcode: str, path=DEFAULT_DATA_PATH) -> P:
     """Returns the default stateless P for the given language."""
-    data: DefaultLangData = _get_data_latin(langcode)
+    data: DefaultLangData = _get_data_latin(langcode, path)
     token2char_scp3: SequentialConditionalP = _constant_scp3(
         1 / data.token_lexicon.n_obs
     )
@@ -38,9 +41,9 @@ def stateless(langcode: str) -> P:
     )
 
 
-def markov(langcode: str) -> P:
+def markov(langcode: str, path=DEFAULT_DATA_PATH) -> P:
     """Returns the default markov P for the given language."""
-    data: DefaultLangData = _get_data_latin(langcode)
+    data: DefaultLangData = _get_data_latin(langcode, path)
     tokens2token_scp3: SequentialConditionalP = _constant_scp3(
         0.5  # FIXME: This is probably very wrong!
     )
